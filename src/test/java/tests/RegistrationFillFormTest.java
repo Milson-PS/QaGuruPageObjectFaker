@@ -38,7 +38,7 @@ public class RegistrationFillFormTest extends TestBase {
     }
 
     @Test
-    void minimumAmountData() {
+    void minimumAmountDataTest() {
         registrationPage.openPage()
                 .setFirstName(testData.firstName)
                 .setLastName(testData.lastName)

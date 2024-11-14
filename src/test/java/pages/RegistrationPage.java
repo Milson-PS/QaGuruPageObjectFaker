@@ -2,11 +2,8 @@ package pages;
 
 import com.codeborne.selenide.SelenideElement;
 import pages.components.CalendarComponents;
+import pages.components.RegistrationResults;
 import pages.components.TableFormComponents;
-
-import java.time.LocalDate;
-import java.time.format.TextStyle;
-import java.util.Locale;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
@@ -22,10 +19,10 @@ public class RegistrationPage {
             subjectsInput = $("#subjectsInput"),
             hobbiesClick = $("#hobbiesWrapper"),
             uploadPicture = $("#uploadPicture"),
-            addressInput = $("#currentAddress"),
+            addressCurrentInput = $("#currentAddress"),
             stateInput = $("#state"),
-            stateCityWrapperInput = $("#stateCity-wrapper"),
             cityInput = $("#city"),
+            stateCityWrapper = $("#stateCity-wrapper"),
             submitClick = $("#submit");
 
     CalendarComponents calendarComponents = new CalendarComponents();
@@ -64,12 +61,9 @@ public class RegistrationPage {
         return this;
     }
 
-    public RegistrationPage setDateOfBirth(LocalDate birthday) {
+    public RegistrationPage setDateOfBirth(String day, String month, String year) {
         calendarInput.click();
-        calendarComponents.setDate(String.format("%02d", birthday.getDayOfMonth()),
-                birthday.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
-                String.valueOf(birthday.getYear()));
-
+        new CalendarComponents().setDate(day, month, year);
         return this;
     }
 
@@ -91,21 +85,21 @@ public class RegistrationPage {
     }
 
 
-    public RegistrationPage setAddress(String value) {
-        addressInput.setValue(value).pressEnter();
+    public RegistrationPage setCurrentAddress(String value) {
+        addressCurrentInput.setValue(value);
         return this;
     }
 
 
-    public RegistrationPage setState(String state) {
+    public RegistrationPage setState(String value) {
         stateInput.click();
-        stateCityWrapperInput.$(byText(state)).click();
+        stateCityWrapper.$(byText(value)).click();
         return this;
     }
 
-    public RegistrationPage setCity(String city) {
+    public RegistrationPage setCity(String value) {
         cityInput.click();
-        stateCityWrapperInput.$(byText(city)).click();
+        stateCityWrapper.$(byText(value)).click();
         return this;
     }
 
@@ -114,15 +108,14 @@ public class RegistrationPage {
         return this;
     }
 
-    public RegistrationPage checkTableResponse(String key, String value) {
-        tableFormComponent.checkResult(key, value);
+    public RegistrationPage checkResult(String key, String value) {
+        new RegistrationResults().checkResult(key, value);
         return this;
     }
 
-    public RegistrationPage checkResultIsNotVisible() {
-        tableFormComponent.checkTableIsNotVisible();
+    public void negativeCheck() {
+        new RegistrationResults().negativeCheck();
 
-        return this;
     }
 }
 

@@ -2,70 +2,79 @@ package utils;
 
 import com.github.javafaker.Faker;
 
-import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 public class RandomUtils {
 
-    static Faker faker = new Faker(new Locale("en"));
+    Faker faker = new Faker(new Locale("en"));
 
-    public static String getRandomString(int len) {
-        String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        SecureRandom rnd = new SecureRandom();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < len; i++)
-            sb.append(AB.charAt(rnd.nextInt(AB.length())));
-
-        return sb.toString();
+    public String FirstName() {
+        return faker.name().firstName();
     }
 
-    public static String getRandomEmail() {
-        return getRandomString(10) + "@qa.guru";
+    public String LastName() {
+        return faker.name().lastName();
     }
 
-    public static String getRandomAddress() {
-        return getRandomString(10) + " " + getRandomString(10) + " " + getRandomString(10);
-
+    public String UserEmail() {
+        return faker.internet().emailAddress();
     }
 
-    public static int getRandomInt(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    public String Gender() {
+        return faker.options().option("Male", "Female", "Other");
     }
 
-    // +3 (263) 253 - 66 - 12
-    public static String getRandomPhoneIncorect() {
-        return String.format("+%s (%s) %s - %s - %s", getRandomInt(1, 4), getRandomInt(111, 999),
-                getRandomInt(111, 999), getRandomInt(11, 99), getRandomInt(11, 99));
+    public String PhoneNumber() {
+        return faker.phoneNumber().subscriberNumber(10);
     }
 
-
-    public static String getRandomItemFromArray(String[] array) {
-        int index = getRandomInt(0, array.length - 1);
-
-        return array[index];
+    public String DayOfBirth() {
+        return String.format("%02d", faker.number().numberBetween(1, 28));
     }
 
-    public static String getRandomCityByState(String state) {
+    public String MonthOfBirth() {
+        return faker.options().option("January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December");
+    }
+
+    public String YearOfBirth() {
+        return String.valueOf(faker.number().numberBetween(1900, LocalDate.now().getYear()));
+    }
+
+    public String Subjects() {
+        return faker.options().option("Economics", "English", "Arts", "Social Studies");
+    }
+
+    public String Hobbies() {
+        return faker.options().option("Sports", "Reading", "Music");
+    }
+
+    public String CurrentAddress() {
+        return faker.address().streetAddress();
+    }
+
+    public String State() {
+        return faker.options().option("NCR", "Haryana", "Uttar Pradesh", "Rajasthan");
+    }
+
+    public String City(String state) {
         Map<String, String[]> citiesByState = new HashMap<>();
         citiesByState.put("NCR", new String[]{"Delhi", "Gurgaon", "Noida"});
         citiesByState.put("Uttar Pradesh", new String[]{"Lucknow", "Agra", "Merrut"});
         citiesByState.put("Haryana", new String[]{"Karnal", "Panipat"});
         citiesByState.put("Rajasthan", new String[]{"Jaiselmer", "Jaipur"});
-
         var citiesForThisState = citiesByState.get(state);
         return faker.options().option(citiesForThisState);
     }
 
-    public static LocalDate getBirthDay(int minAge, int maxAge) {
-        var birthDay = faker.date().birthday(minAge, maxAge);
-
-        return LocalDate.ofInstant(birthDay.toInstant(), ZoneId.systemDefault());
-    }
-
+    ;
 
 }
+
+
+
+

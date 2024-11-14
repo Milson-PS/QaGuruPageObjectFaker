@@ -1,76 +1,95 @@
 package tests;
 
-import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.Test;
 import utils.RandomUtils;
 
 
 public class RegistrationFillFormTest extends TestBase {
 
+
+    private final RandomUtils random = new RandomUtils();
+
+
+    String
+            firstName = random.FirstName(),
+            lastName = random.LastName(),
+            userEmail = random.UserEmail(),
+            gender = random.Gender(),
+            phoneNumber = random.PhoneNumber(),
+            dayOfBirth = random.DayOfBirth(),
+            monthOfBirth = random.MonthOfBirth(),
+            yearOfBirth = random.YearOfBirth(),
+            subjects = random.Subjects(),
+            hobbies = random.Hobbies(),
+            picName = "bag.png",
+            currentAddress = random.CurrentAddress(),
+            state = random.State(),
+            city = random.City(state);
+
     @Test
     void fillFormTest() {
         registrationPage.openPage()
-                .setFirstName(testData.firstName)
-                .setLastName(testData.lastName)
-                .setUserEmail(testData.userEmail)
-                .setGender(testData.userGender)
-                .setNumber(testData.userNumber)
-                .setDateOfBirth(testData.birthdayDay)
-                .setSubjects(testData.userSubject)
-                .setHobbies(testData.userInterest)
-                .setPicture(testData.picturePath)
-                .setAddress(testData.streetAddress)
-                .setState(testData.userState)
-                .setCity(testData.userCity)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUserEmail(userEmail)
+                .setGender(gender)
+                .setNumber(phoneNumber)
+                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
+                .setSubjects(subjects)
+                .setHobbies(hobbies)
+                .setPicture(picName)
+                .setCurrentAddress(currentAddress)
+                .setState(state)
+                .setCity(city)
                 .Submit();
 
         registrationPage
-                .checkTableResponse("Student Name", testData.firstName + " " + testData.lastName)
-                .checkTableResponse("Student Email", testData.userEmail)
-                .checkTableResponse("Gender", testData.userGender)
-                .checkTableResponse("Mobile", testData.userNumber)
-                .checkTableResponse("Date of Birth", testData.birthdayDay.format(formatter))
-                .checkTableResponse("Subjects", testData.userSubject)
-                .checkTableResponse("Hobbies", testData.userInterest)
-                .checkTableResponse("Picture", testData.picturePath)
-                .checkTableResponse("Address", testData.streetAddress)
-                .checkTableResponse("State and City", testData.userState + " " + testData.userCity);
+                .checkResult("Student Name", firstName + " " + lastName)
+                .checkResult("Student Email", userEmail)
+                .checkResult("Gender", gender)
+                .checkResult("Mobile", phoneNumber)
+                .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
+                .checkResult("Subjects", subjects)
+                .checkResult("Hobbies", hobbies)
+                .checkResult("Picture", picName)
+                .checkResult("Address", currentAddress)
+                .checkResult("State and City", state + " " + city);
     }
 
     @Test
     void minimumAmountDataTest() {
         registrationPage.openPage()
-                .setFirstName(testData.firstName)
-                .setLastName(testData.lastName)
-                .setUserEmail(testData.userEmail)
-                .setGender(testData.userGender)
-                .setNumber(testData.userNumber)
-                .setDateOfBirth(testData.birthdayDay)
-                .setHobbies(testData.userInterest)
-                .setAddress(testData.streetAddress)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUserEmail(userEmail)
+                .setGender(gender)
+                .setNumber(phoneNumber)
+                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
+                .setSubjects(subjects)
+                .setHobbies(hobbies)
                 .Submit();
 
         registrationPage
-                .checkTableResponse("Student Name", testData.firstName + " " + testData.lastName)
-                .checkTableResponse("Student Email", testData.userEmail)
-                .checkTableResponse("Gender", testData.userGender)
-                .checkTableResponse("Mobile", testData.userNumber)
-                .checkTableResponse("Date of Birth", testData.birthdayDay.format(formatter))
-                .checkTableResponse("Hobbies", testData.userInterest)
-                .checkTableResponse("Address", testData.streetAddress);
+                .checkResult("Student Name", firstName + " " + lastName)
+                .checkResult("Student Email", userEmail)
+                .checkResult("Gender", gender)
+                .checkResult("Mobile", phoneNumber)
+                .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
+                .checkResult("Subjects", subjects)
+                .checkResult("Hobbies", hobbies);
     }
 
     @Test
     void incorrectPhoneNumberTest() {
         registrationPage.openPage()
-                .setFirstName(testData.firstName)
-                .setLastName(testData.lastName)
-                .setGender(testData.userGender)
-                .setNumber(RandomUtils.getRandomPhoneIncorect())
-                .setDateOfBirth(testData.birthdayDay)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setGender(gender)
+                .setNumber(phoneNumber)
+                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
                 .Submit();
 
-        registrationPage.checkResultIsNotVisible();
+        registrationPage.negativeCheck();
 
     }
 }

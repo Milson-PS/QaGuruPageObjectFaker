@@ -1,6 +1,10 @@
 package tests;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import utils.RandomUtils;
 
 
@@ -20,44 +24,18 @@ public class RegistrationFillFormTest extends TestBase {
             monthOfBirth = random.MonthOfBirth(),
             yearOfBirth = random.YearOfBirth(),
             subjects = random.Subjects(),
-            hobbies = random.Hobbies(),
-            picName = "bag.png",
-            currentAddress = random.CurrentAddress(),
-            state = random.State(),
-            city = random.City(state);
+            hobbies = random.Hobbies();
 
-    @Test
-    void fillFormTest() {
-        registrationPage.openPage()
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setUserEmail(userEmail)
-                .setGender(gender)
-                .setNumber(phoneNumber)
-                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
-                .setSubjects(subjects)
-                .setHobbies(hobbies)
-                .setPicture(picName)
-                .setCurrentAddress(currentAddress)
-                .setState(state)
-                .setCity(city)
-                .Submit();
 
-        registrationPage
-                .checkResult("Student Name", firstName + " " + lastName)
-                .checkResult("Student Email", userEmail)
-                .checkResult("Gender", gender)
-                .checkResult("Mobile", phoneNumber)
-                .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
-                .checkResult("Subjects", subjects)
-                .checkResult("Hobbies", hobbies)
-                .checkResult("Picture", picName)
-                .checkResult("Address", currentAddress)
-                .checkResult("State and City", state + " " + city);
-    }
 
-    @Test
-    void minimumAmountDataTest() {
+    @CsvSource(value = {
+            "lastName, Male",
+            "lastName, Female",
+            "lastName, Other"
+    })
+    @ParameterizedTest(name = "Ввод части данных на странице c разным полом {1}")
+    @Tag("WEB + Parameterized test")
+    void genderTest(String lastName, String gender) {
         registrationPage.openPage()
                 .setFirstName(firstName)
                 .setLastName(lastName)
@@ -79,19 +57,56 @@ public class RegistrationFillFormTest extends TestBase {
                 .checkResult("Hobbies", hobbies);
     }
 
-    @Test
-    void incorrectPhoneNumberTest() {
+
+
+
+    @ValueSource(strings = {
+            "....1",
+            "Текст"
+    })
+    @ParameterizedTest(name = "Параметризованный тест с вводом данных {0} в поле с некоректных значений")
+    @Tag("WEB + Parameterized test")
+    void phoneNumberTest(String paraNumber) {
         registrationPage.openPage()
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setGender(gender)
-                .setNumber(phoneNumber)
+                .setNumber(paraNumber)
                 .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
                 .Submit();
 
         registrationPage.negativeCheck();
 
     }
+
+
+
+    @CsvFileSource(resources = "testData/RegistrationFillFormTest.csv")
+    @ParameterizedTest(name = "Ввод хобби {1} в зависимости от имени {0}")
+    @Tag("WEB + Parameterized test")
+    void hobbiesTest(String firstName, String hobbies) {
+        registrationPage.openPage()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUserEmail(userEmail)
+                .setGender(gender)
+                .setNumber(phoneNumber)
+                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
+                .setSubjects(subjects)
+                .setHobbies(hobbies)
+                .Submit();
+
+        registrationPage
+                .checkResult("Student Name", firstName + " " + lastName)
+                .checkResult("Student Email", userEmail)
+                .checkResult("Gender", gender)
+                .checkResult("Mobile", phoneNumber)
+                .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
+                .checkResult("Subjects", subjects)
+                .checkResult("Hobbies", hobbies);
+    }
+
+
 }
 
 

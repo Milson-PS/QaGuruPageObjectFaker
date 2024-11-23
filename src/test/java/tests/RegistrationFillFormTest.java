@@ -7,6 +7,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import utils.RandomUtils;
 
+import static io.qameta.allure.Allure.step;
+
 @Tag("regress")
 public class RegistrationFillFormTest extends TestBase {
 
@@ -32,7 +34,9 @@ public class RegistrationFillFormTest extends TestBase {
     @ParameterizedTest(name = "Ввод части данных на странице с разным полом {1}")
     @Tag("WEB")
     @Tag("ParameterizedTest")
+
     void genderTest(String lastName, String gender) {
+        step("Заполнение всех полей формы", () -> {
         registrationPage.openPage()
                 .setFirstName(firstName)
                 .setLastName(lastName)
@@ -43,7 +47,9 @@ public class RegistrationFillFormTest extends TestBase {
                 .setSubjects(subjects)
                 .setHobbies(hobbies)
                 .submit();
+        });
 
+        step("Проверка заполнения всех полей формы", () -> {
         registrationPage
                 .checkResult("Student Name", firstName + " " + lastName)
                 .checkResult("Student Email", userEmail)
@@ -52,6 +58,7 @@ public class RegistrationFillFormTest extends TestBase {
                 .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
                 .checkResult("Subjects", subjects)
                 .checkResult("Hobbies", hobbies);
+        });
     }
 
     @ValueSource(strings = {

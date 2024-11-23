@@ -103,7 +103,7 @@ public class RegistrationPage {
         return this;
     }
 
-    public RegistrationPage Submit() {
+    public RegistrationPage submit() {
         submitClick.click();
         return this;
     }

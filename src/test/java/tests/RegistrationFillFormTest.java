@@ -42,7 +42,7 @@ public class RegistrationFillFormTest extends TestBase {
                 .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
                 .setSubjects(subjects)
                 .setHobbies(hobbies)
-                .Submit();
+                .submit();
 
         registrationPage
                 .checkResult("Student Name", firstName + " " + lastName)
@@ -68,7 +68,7 @@ public class RegistrationFillFormTest extends TestBase {
                 .setGender(gender)
                 .setNumber(paraNumber)
                 .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
-                .Submit();
+                .submit();
 
         registrationPage.negativeCheck();
     }
@@ -87,7 +87,7 @@ public class RegistrationFillFormTest extends TestBase {
                 .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
                 .setSubjects(subjects)
                 .setHobbies(hobbies)
-                .Submit();
+                .submit();
 
         registrationPage
                 .checkResult("Student Name", firstName + " " + lastName)

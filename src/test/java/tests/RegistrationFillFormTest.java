@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import utils.RandomUtils;
 
-
+@Tag("regress")
 public class RegistrationFillFormTest extends TestBase {
 
 
@@ -25,7 +25,6 @@ public class RegistrationFillFormTest extends TestBase {
             yearOfBirth = random.YearOfBirth(),
             subjects = random.Subjects(),
             hobbies = random.Hobbies();
-
 
 
     @CsvSource(value = {
@@ -59,7 +58,6 @@ public class RegistrationFillFormTest extends TestBase {
 
 
 
-
     @ValueSource(strings = {
             "....1",
             "Текст"
@@ -78,7 +76,6 @@ public class RegistrationFillFormTest extends TestBase {
         registrationPage.negativeCheck();
 
     }
-
 
 
     @CsvFileSource(resources = "testData/RegistrationFillFormTest.csv")

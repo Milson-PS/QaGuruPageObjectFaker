@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import utils.RandomUtils;
 
-@Tag("regress")
+
 public class RegistrationFillFormTest extends TestBase {
 
 
@@ -77,7 +77,7 @@ public class RegistrationFillFormTest extends TestBase {
 
     }
 
-
+    @Tag("regress")
     @CsvFileSource(resources = "testData/RegistrationFillFormTest.csv")
     @ParameterizedTest(name = "Ввод хобби {1} в зависимости от имени {0}")
     @Tag("WEB + Parameterized test")

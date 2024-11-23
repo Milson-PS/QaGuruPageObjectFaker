@@ -26,6 +26,34 @@ public class RegistrationFillFormTest extends TestBase {
             subjects = random.Subjects(),
             hobbies = random.Hobbies();
 
+    private void fillRegistrationForm(String lastName, String gender) {
+        step("Заполнение всех полей формы", () -> {
+            registrationPage.openPage()
+                    .setFirstName(firstName)
+                    .setLastName(lastName)
+                    .setUserEmail(userEmail)
+                    .setGender(gender)
+                    .setNumber(phoneNumber)
+                    .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
+                    .setSubjects(subjects)
+                    .setHobbies(hobbies)
+                    .submit();
+        });
+    }
+
+    private void verifyRegistrationResults(String lastName, String gender) {
+        step("Проверка заполнения всех полей формы", () -> {
+            registrationPage
+                    .checkResult("Student Name", firstName + " " + lastName)
+                    .checkResult("Student Email", userEmail)
+                    .checkResult("Gender", gender)
+                    .checkResult("Mobile", phoneNumber)
+                    .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
+                    .checkResult("Subjects", subjects)
+                    .checkResult("Hobbies", hobbies);
+        });
+    }
+
     @CsvSource(value = {
             "lastName, Male",
             "lastName, Female",
@@ -34,31 +62,9 @@ public class RegistrationFillFormTest extends TestBase {
     @ParameterizedTest(name = "Ввод части данных на странице с разным полом {1}")
     @Tag("WEB")
     @Tag("ParameterizedTest")
-
     void genderTest(String lastName, String gender) {
-        step("Заполнение всех полей формы", () -> {
-        registrationPage.openPage()
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setUserEmail(userEmail)
-                .setGender(gender)
-                .setNumber(phoneNumber)
-                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
-                .setSubjects(subjects)
-                .setHobbies(hobbies)
-                .submit();
-        });
-
-        step("Проверка заполнения всех полей формы", () -> {
-        registrationPage
-                .checkResult("Student Name", firstName + " " + lastName)
-                .checkResult("Student Email", userEmail)
-                .checkResult("Gender", gender)
-                .checkResult("Mobile", phoneNumber)
-                .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
-                .checkResult("Subjects", subjects)
-                .checkResult("Hobbies", hobbies);
-        });
+        fillRegistrationForm(lastName, gender);
+        verifyRegistrationResults(lastName, gender);
     }
 
     @ValueSource(strings = {
@@ -80,29 +86,14 @@ public class RegistrationFillFormTest extends TestBase {
         registrationPage.negativeCheck();
     }
 
-    @CsvFileSource(resources = "testData/RegistrationFillFormTest.csv")
+    @CsvFileSource(resources = "/tests.testData/RegistrationFillFormTest.csv")
     @ParameterizedTest(name = "Ввод хобби {1} в зависимости от имени {0}")
     @Tag("WEB")
     @Tag("ParameterizedTest")
     void hobbiesTest(String firstName, String hobbies) {
-        registrationPage.openPage()
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setUserEmail(userEmail)
-                .setGender(gender)
-                .setNumber(phoneNumber)
-                .setDateOfBirth(dayOfBirth, monthOfBirth, yearOfBirth)
-                .setSubjects(subjects)
-                .setHobbies(hobbies)
-                .submit();
+        fillRegistrationForm(firstName, gender);
+        registrationPage.setHobbies(hobbies).submit();
 
-        registrationPage
-                .checkResult("Student Name", firstName + " " + lastName)
-                .checkResult("Student Email", userEmail)
-                .checkResult("Gender", gender)
-                .checkResult("Mobile", phoneNumber)
-                .checkResult("Date of Birth", dayOfBirth + " " + monthOfBirth + "," + yearOfBirth)
-                .checkResult("Subjects", subjects)
-                .checkResult("Hobbies", hobbies);
+        verifyRegistrationResults(firstName, gender);
     }
 }

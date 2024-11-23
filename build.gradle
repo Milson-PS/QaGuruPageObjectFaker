@@ -7,8 +7,8 @@ repositories {
     mavenCentral()
 }
 
-def allureVersion = "2.21.0",
-    selenideVersion = "6.19.1"
+def allureVersion = "2.21.0"
+def selenideVersion = "6.19.1"
 
 allure {
     report {
@@ -25,23 +25,20 @@ allure {
 }
 
 dependencies {
-    testImplementation(
-            "com.codeborne:selenide:$selenideVersion",
-            "io.qameta.allure:allure-selenide:$allureVersion",
-            "org.junit.jupiter:junit-jupiter:5.10.0",
-            'org.slf4j:slf4j-simple:2.0.7',
-            "com.github.javafaker:javafaker:1.0.2"
-    )
+    testImplementation("com.codeborne:selenide:$selenideVersion")
+    testImplementation("io.qameta.allure:allure-selenide:$allureVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.slf4j:slf4j-simple:2.0.7")
+    testImplementation("com.github.javafaker:javafaker:1.0.2")
 }
 
 tasks.withType(Test) {
     useJUnitPlatform()
 
     testLogging {
-        lifecycle {
-            events "started", "skipped", "failed", "standard_error", "standard_out"
-            exceptionFormat "short"
-        }
+        events "started", "passed", "skipped", "failed", "standard_error", "standard_out"
+        exceptionFormat "full" // Измените на 'full' для более детального вывода ошибок
+        showStandardStreams = true // Показывать стандартные потоки вывода
     }
 }
 
@@ -49,10 +46,12 @@ task regress_test(type: Test) {
     useJUnitPlatform {
         includeTags("regress")
     }
+    description = 'Запуск регрессионных тестов'
 }
 
 task demoqa_test(type: Test) {
     useJUnitPlatform {
         includeTags("demoqa")
     }
+    description = 'Запуск тестов DemoQA'
 }

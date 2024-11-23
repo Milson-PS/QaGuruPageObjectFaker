@@ -7,12 +7,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import utils.RandomUtils;
 
-
+@Tag("regress")
 public class RegistrationFillFormTest extends TestBase {
 
-
     private final RandomUtils random = new RandomUtils();
-
 
     String
             firstName = random.FirstName(),
@@ -26,14 +24,14 @@ public class RegistrationFillFormTest extends TestBase {
             subjects = random.Subjects(),
             hobbies = random.Hobbies();
 
-
     @CsvSource(value = {
             "lastName, Male",
             "lastName, Female",
             "lastName, Other"
     })
-    @ParameterizedTest(name = "Ввод части данных на странице c разным полом {1}")
-    @Tag("WEB + Parameterized test")
+    @ParameterizedTest(name = "Ввод части данных на странице с разным полом {1}")
+    @Tag("WEB")
+    @Tag("ParameterizedTest")
     void genderTest(String lastName, String gender) {
         registrationPage.openPage()
                 .setFirstName(firstName)
@@ -56,14 +54,13 @@ public class RegistrationFillFormTest extends TestBase {
                 .checkResult("Hobbies", hobbies);
     }
 
-
-
     @ValueSource(strings = {
             "....1",
             "Текст"
     })
-    @ParameterizedTest(name = "Параметризованный тест с вводом данных {0} в поле с некоректных значений")
-    @Tag("WEB + Parameterized test")
+    @ParameterizedTest(name = "Параметризованный тест с вводом данных {0} в поле с некорректных значений")
+    @Tag("WEB")
+    @Tag("ParameterizedTest")
     void phoneNumberTest(String paraNumber) {
         registrationPage.openPage()
                 .setFirstName(firstName)
@@ -74,13 +71,12 @@ public class RegistrationFillFormTest extends TestBase {
                 .Submit();
 
         registrationPage.negativeCheck();
-
     }
 
-    @Tag("regress")
     @CsvFileSource(resources = "testData/RegistrationFillFormTest.csv")
     @ParameterizedTest(name = "Ввод хобби {1} в зависимости от имени {0}")
-    @Tag("WEB + Parameterized test")
+    @Tag("WEB")
+    @Tag("ParameterizedTest")
     void hobbiesTest(String firstName, String hobbies) {
         registrationPage.openPage()
                 .setFirstName(firstName)
@@ -102,16 +98,4 @@ public class RegistrationFillFormTest extends TestBase {
                 .checkResult("Subjects", subjects)
                 .checkResult("Hobbies", hobbies);
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-

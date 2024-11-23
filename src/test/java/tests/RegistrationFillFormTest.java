@@ -58,7 +58,7 @@ public class RegistrationFillFormTest extends TestBase {
             "....1",
             "Текст"
     })
-    @ParameterizedTest(name = "Параметризованный тест с вводом данных {0} в поле с некорректных значений")
+    @ParameterizedTest(name = "Параметризованный тест с вводом данных {0} в поле с некорректными значениями")
     @Tag("WEB")
     @Tag("ParameterizedTest")
     void phoneNumberTest(String paraNumber) {
